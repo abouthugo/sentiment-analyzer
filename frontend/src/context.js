@@ -5,7 +5,9 @@ export const TweetsContext = createContext([]);
 export const TweetsContextProvider = ({children}) => {
   const [tweets, setTweets] = useState([]);
   const fetched = false;
+  
   useEffect(() => {
+    document.title = "Tweet Analyzer"
     async function fetchData() {
       const res = await fetch("http://localhost:3000/tweets/");
       const data = await res.json();
