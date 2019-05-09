@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { FixedSizeList } from 'react-window'
 import Card from './Card';
+import {TweetsContext} from '../context'
 
 function List() {
-  const [tweets, setTweets] = useState([]);
-  const fetched = false;
+  
+  const tweets = useContext(TweetsContext);
 
   const Row = ({ index, style }) => {
     const { text, gcloud, afinn, id } = tweets[index]
@@ -22,18 +23,6 @@ function List() {
 
     )
   };
-
-  useEffect(() => {
-    async function fetchData() {
-      const res = await fetch("http://localhost:3000/tweets/");
-      const data = await res.json();
-      setTweets([...data]);
-    }
-
-    fetchData();
-  }, [fetched])
-
-
 
   return (
     <FixedSizeList
