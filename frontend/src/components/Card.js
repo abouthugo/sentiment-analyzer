@@ -14,18 +14,12 @@ const Layout = styled.div`
   min-height: fit-content;
 `
 
-const Card = ({text, gcloud, afinn}) => (
+const Card = ({text, gcloud}) => (
   <Layout>
     <Text>{text}</Text>
-    <p>Google Cloud NLP API</p>
     <div style={{"display": "flex"}}>
-      <div style={{"margin": 4}}>Score {gcloud.score}</div>
-      <div style={{"margin": 4}}>Magnitude {gcloud.magnitude}</div>
-    </div>
-    <p>AFINN based sentiment analysis</p>
-    <div style={{"display": "flex"}}>
-      <div style={{"margin": 4}}>Score {afinn.score}</div>
-      <div style={{"margin": 4}}>Comparative {afinn.comparative}</div>
+      <div style={{"margin": 4}}>Score {gcloud.score.toFixed(2)}</div>
+      <div style={{"margin": 4}}>Magnitude {gcloud.magnitude.toFixed(2)}</div>
     </div>
   </Layout>
 )

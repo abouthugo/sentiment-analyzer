@@ -14,17 +14,21 @@ function List() {
   }
   const tweets = useContext(TweetsContext);
   const tweetsMonth = tweets.filter(t => new Date(t.created_at).getMonth() === month);
-  const weeks  = splitByWeek(tweetsMonth);
-  console.log(weeks)
+  const weeks = splitByWeek(tweetsMonth);
+  let data = [];
+
+  for (let k in weeks) {
+    data.push(packData(mapScores(weeks[k]), k));
+  }  
+
   const Row = ({ index, style }) => {
-    const { text, gcloud, afinn, id } = tweetsMonth[index]
+    const { text, gcloud, id } = tweetsMonth[index]
     return (
       <div
         key={id}
         style={style}>
         <Card
           text={text}
-          afinn={afinn}
           gcloud={gcloud}
         />
       </div>
@@ -36,23 +40,26 @@ function List() {
     <Segment>
       <Grid columns={2}>
         <Grid.Column>
+          <h1>Tweets</h1>
           <Select month={month} handleChange={handleChange} />
           <FixedSizeList
             height={500}
             width={600}
-            itemSize={250}
+            itemSize={150}
             itemCount={tweetsMonth.length}
             style={{ padding: 20, border: "1px solid black", "borderRadius": 4, margin: "10px 0 " }}
           >
             {Row}
           </FixedSizeList>
-          <Statistic>
+          <Statistic horizontal>
             <Statistic.Value>{tweetsMonth.length}</Statistic.Value>
             <Statistic.Label>Tweets</Statistic.Label>
           </Statistic>
         </Grid.Column>
         <Grid.Column>
-          <BarChart />
+          <h1>Statistics</h1>
+          <BarChart data={data} />
+          <Statistic.Group items={reduceStats(data)} style={{display: 'flex', justifyContent: "center"}}/>
         </Grid.Column>
       </Grid>
       <Divider vertical>Stats</Divider>
@@ -84,23 +91,47 @@ function splitByWeek(tweets) {
   return { week1, week2, week3, week4 };
 }
 
-function googleReducer(a, b) {
-  return {
-    gcloud: {
-      score: a.gcloud.score + b.gcloud.score,
-      magnitude: a.gcloud.magnitude + b.gcloud.magnitude
+function mapScores(week) {
+  let neutral = 0;
+  let positive = 0;
+  let negative = 0;
+  for (let i of week) {
+    let score = i.gcloud.score;
+    if (score >= 0.2) {
+      positive++;
+    } else if (score < 0.2 && score > -0.2) {
+      neutral++;
+    } else {
+      negative++;
     }
+  }
+  return { neutral, positive, negative }
+}
+
+function packData(scores, week) {
+  return {
+    week,
+    ...scores,
+    "neutralColor": "#DDCE9F",
+    "negativeColor": "#B05959",
+    "positiveColor": "#678FB7"
   }
 }
 
-function afinnReducer(a, b) {
-  return {
-    afinn: {
-      score: a.afinn.score + b.afinn.score,
-      comparative: a.afinn.comparative + b.afinn.comparative
-    }
+function reduceStats(weeks){
+  let positive = 0;
+  let neutral = 0;
+  let negative = 0;
+  for(let week of weeks){
+    positive += week['positive'];
+    neutral += week['neutral'];
+    negative += week['negative'];
   }
+  return [
+    {key: "pos", label:"Positives", value: positive},
+    {key: "neg", label:"Negatives", value: negative},
+    {key: "neu", label:"Neutrals", value: neutral},
+  ]
 }
-
 
 export default List;

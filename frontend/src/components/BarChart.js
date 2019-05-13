@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import {ResponsiveBar} from '@nivo/bar';
 import * as configs from '../configs/bar.config'
-import barData from '../configs/bar.data'
 
 const Container = styled.div`
   position: relative;
@@ -11,10 +10,10 @@ const Container = styled.div`
 `
 
 
-export default () => {
+export default ({data}) => {
   return (
     <Container>
-      <ResponsiveBar {...configs} data={barData}/>
+      <ResponsiveBar {...configs} data={data}/>
     </Container>
   )
 }

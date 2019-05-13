@@ -2,7 +2,7 @@ export const keys = ['neutral', 'negative', 'positive']
 export const indexBy = "week"
 export const margin = { top: 50, right: 130, bottom: 50, left: 60 }
 export const padding = 0.3
-export const colors = ({id, data}) => data[`${id}Color`]
+export const colors = ({ id, data }) => data[`${id}Color`]
 export const borderWidth = 1
 export const fill = [
     {
@@ -25,7 +25,7 @@ export const axisBottom = {
     tickSize: 5,
     tickPadding: 5,
     tickRotation: 0,
-    legend: 'week',
+    legend: 'Week',
     legendPosition: 'middle',
     legendOffset: 32
 }
